@@ -21,8 +21,9 @@ buildNumber.properties
 
 ### Segredos / ambiente ###
 .env
-.env.*
-*.env
+.env.local
+.env.*.local
+!.env.example
 
 ### Logs ###
 *.log
