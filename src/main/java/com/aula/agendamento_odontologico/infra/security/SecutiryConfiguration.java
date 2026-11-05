@@ -4,7 +4,6 @@ package com.aula.agendamento_odontologico.infra.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,7 +31,9 @@ public class SecutiryConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         // Health check público: usado pelo Render e por monitoramento.
                         .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        // /login é público; /error também precisa ser, senão o Spring Security
+                        // bloqueia o dispatch interno de erros e mascara o status real com 403.
+                        .requestMatchers("/login", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
 
