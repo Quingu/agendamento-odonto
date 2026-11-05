@@ -27,7 +27,19 @@ A aplicação **não** guarda credenciais no código. Ela lê:
 
 ### Rodando localmente
 
-PowerShell:
+Copie `.env.example` para `.env` e preencha os valores (o `.env` não vai para o Git).
+
+Para carregar o `.env` na sessão do PowerShell:
+
+```powershell
+Get-Content .env | Where-Object { $_ -match '^\s*[^#].*=' } | ForEach-Object {
+    $k, $v = $_ -split '=', 2
+    Set-Item -Path "Env:$($k.Trim())" -Value $v.Trim()
+}
+.\mvnw.cmd spring-boot:run
+```
+
+Ou via Maven Wrapper, definindo as variáveis manualmente:
 
 ```powershell
 $env:DB_URL="jdbc:mysql://SEU_HOST:SUA_PORTA/defaultdb?sslMode=REQUIRED"
